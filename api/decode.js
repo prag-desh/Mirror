@@ -1,7 +1,9 @@
-const OpenAI = require("openai");
-require("dotenv").config();
+import OpenAI from "openai";
+import dotenv from "dotenv";
 
-module.exports = async function handler(req, res) {
+dotenv.config();
+
+export default async function handler(req, res) {
   // Set response headers first
   res.setHeader("Content-Type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -21,27 +23,8 @@ module.exports = async function handler(req, res) {
   }
   
   try {
-    // Parse request body safely
-    let input = "";
-    try {
-      input = await new Promise((resolve, reject) => {
-        let body = "";
-        req.on("data", chunk => {
-          body += chunk.toString();
-        });
-        req.on("end", () => {
-          try {
-            const parsed = JSON.parse(body);
-            resolve(parsed.input || "");
-          } catch (e) {
-            resolve(body);
-          }
-        });
-        req.on("error", reject);
-      });
-    } catch (e) {
-      return res.status(400).json({ error: "Invalid request body" });
-    }
+    // Parse request body
+    const { input } = req.body;
     
     if (!input || !input.trim()) {
       return res.status(400).json({ error: "Input is required" });
@@ -125,4 +108,4 @@ module.exports = async function handler(req, res) {
       details: error.message 
     });
   }
-};
+}
