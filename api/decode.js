@@ -1,10 +1,7 @@
-import OpenAI from "openai";
-import dotenv from "dotenv";
+const OpenAI = require("openai");
+require("dotenv").config();
 
-// Load environment variables
-dotenv.config();
-
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Set response headers first
   res.setHeader("Content-Type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -128,4 +125,4 @@ export default async function handler(req, res) {
       details: error.message 
     });
   }
-}
+};
